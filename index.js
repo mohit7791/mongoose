@@ -5,12 +5,23 @@ const connect = mongoose.connect(url);
 connect.then((db) => {
     console.log("connected to server");
     dishes.create({
-        name: "Rohit",
+        name: "Jack",
         description: "test"
     }).then((dish) => {
         console.log(dish);
-        return dishes.find({}).exec();
+        return dishes.findByIdAndUpdate(dish._id,{
+             $set:{description:"Updated"}},
+            {new:true}
+        ).exec();
     }).then((dish) => {
+        console.log(dish);
+        dish.comments.push({
+            rating:5,
+            comment:'I am author',
+            author:"Mohit"
+        });
+        return dish.save();
+    }).then((dish)=>{
         console.log(dish);
         return dishes.remove({});
     }).then(() => {
